@@ -1,11 +1,13 @@
 "use strict";
 
 var startButton = document.getElementById( 'startButton' );
+var pauseButton = document.getElementById( 'pauseButton' );
 var urlInput = document.getElementById( 'urlInput' );
 var maxResultsInput = document.getElementById( 'maxResultsInput' );
 var playerArea = document.getElementById( 'playerArea' );
 
 startButton.onclick = doTheThing;
+pauseButton.onclick = pauseVideos;
 
 
 /*
@@ -69,8 +71,17 @@ function idFromUrl( url ) {
 
 function generateIframe( id ) {
 	return '<iframe class="ytplayer" type="text/html" width="640" height="390"'
-		+ 'src="http://www.youtube.com/embed/' + id + '?autoplay=1&enablejsapi=1&origin=' + window.location.hostname 
+		+ 'src="http://www.youtube.com/embed/' + id + '?autoplay=1&enablejsapi=1"'
 		+ 'frameborder="0" />';
 }
 
+function pauseVideos() {
+	var pauseArgs = '{ "event": "command", "func": "pauseVideo", "args": ""}'
+
+	var iframes = document.getElementsByTagName( "iframe" );
+	var framesCount = iframes.length;
+	for (var i = 0; i < framesCount; i++) {
+		var iframe = iframes[i].contentWindow;;
+		iframe.postMessage( pauseArgs, '*' );
+	};
 }
