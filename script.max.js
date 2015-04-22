@@ -1,40 +1,76 @@
-// Your use of the YouTube API must comply with the Terms of Service:
-// https://developers.google.com/youtube/terms
+"use strict";
 
-// Helper function to display JavaScript value on HTML page.
-function showResponse(response) {
-    var responseString = JSON.stringify(response, '', 2);
-    document.getElementById('response').innerHTML += responseString;
-}
+var startButton = document.getElementById( 'startButton' );
+var urlInput = document.getElementById( 'urlInput' );
+var maxResultsInput = document.getElementById( 'maxResultsInput' );
+var playerArea = document.getElementById( 'playerArea' );
 
-// Called automatically when JavaScript client library is loaded.
+startButton.onclick = doTheThing;
+
+
+/*
+*	The following functions are automatically executed and handle loading of the youtube API
+*/
 function onClientLoad() {
-    gapi.client.load('youtube', 'v3', onYouTubeApiLoad);
+	gapi.client.load('youtube', 'v3', onYouTubeApiLoad);
 }
 
-// Called automatically when YouTube API interface is loaded (see line 9).
 function onYouTubeApiLoad() {
-    // This API key is intended for use only in this lesson.
-    // See http://goo.gl/PdPA1 to get a key for your own applications.
-    gapi.client.setApiKey('AIzaSyDEC1XbDsDgy4bOthILo21Z_IQjCCIEqfc');
-
-    search();
+	gapi.client.setApiKey('AIzaSyDEC1XbDsDgy4bOthILo21Z_IQjCCIEqfc');
 }
 
-function search() {
-    // Use the JavaScript client library to create a search.list() API call.
-    var request = gapi.client.youtube.search.list({
-        part: 'snippet',
-        q: "isabel schmiedel"
-        
-    });
-    
-    // Send the request to the API server,
-    // and invoke onSearchRepsonse() with the response.
-    request.execute(onSearchResponse);
+
+
+/*
+*	These functions are custom.
+*/
+
+function getVideos(playlistId, maxResults) {
+	// Use the JavaScript client library to create a search.list() API call.
+
+	console.log(playlistId + "  " + maxResults);
+
+	var request = gapi.client.youtube.playlistItems.list({
+		playlistId: playlistId,
+		maxResults: maxResults,
+		part: 'snippet'
+	});
+	
+	// Send the request to the API server,
+	// and invoke onSearchRepsonse() with the response.
+	request.execute(onSearchResponse);
 }
 
 // Called automatically with the response of the YouTube API request.
 function onSearchResponse(response) {
-    showResponse(response);
+	var videos = response.items;
+	var videoCount = videos.length;
+
+	for (var i = 0; i < videoCount; i++) {
+		var video = videos[i];
+		var videoId = video.snippet.resourceId.videoId;
+		var frame = generateIframe( videoId );
+
+		playerArea.innerHTML += frame;
+	}
+}
+
+function doTheThing() {
+	var url = urlInput.value;
+	var maxResults = maxResultsInput.value;
+	var playlistId = idFromUrl( url );
+
+	getVideos(playlistId, maxResults);
+}
+
+function idFromUrl( url ) {
+	return "PLaWFsJLVVTDN59DBRXzGFSVy70cy30dtt";
+}
+
+function generateIframe( id ) {
+	return '<iframe class="ytplayer" type="text/html" width="640" height="390"'
+		+ 'src="http://www.youtube.com/embed/' + id + '?autoplay=1?enablejsapi=1&origin=' + window.location.hostname 
+		+ 'frameborder="0" />';
+}
+
 }
