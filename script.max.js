@@ -69,7 +69,7 @@ function idFromUrl( url ) {
 
 function generateIframe( id ) {
 	return '<iframe class="ytplayer" type="text/html" width="640" height="390"'
-		+ 'src="http://www.youtube.com/embed/' + id + '?autoplay=1?enablejsapi=1&origin=' + window.location.hostname 
+		+ 'src="http://www.youtube.com/embed/' + id + '?autoplay=1&enablejsapi=1&origin=' + window.location.hostname 
 		+ 'frameborder="0" />';
 }
 
