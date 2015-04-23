@@ -1,10 +1,15 @@
 "use strict";
 
+var options = {
+	maxResults: 9
+}
+
 var startButton = document.getElementById( 'startButton' );
 var pauseButton = document.getElementById( 'pauseButton' );
 var urlInput = document.getElementById( 'urlInput' );
-var maxResultsInput = document.getElementById( 'maxResultsInput' );
 var playerArea = document.getElementById( 'playerArea' );
+
+
 
 startButton.onclick = doTheThing;
 pauseButton.onclick = pauseVideos;
@@ -27,19 +32,13 @@ function onYouTubeApiLoad() {
 *	These functions are custom.
 */
 
-function getVideos(playlistId, maxResults) {
-	// Use the JavaScript client library to create a search.list() API call.
-
-	console.log(playlistId + "  " + maxResults);
-
+function getVideos( playlistId ) {
 	var request = gapi.client.youtube.playlistItems.list({
 		playlistId: playlistId,
-		maxResults: maxResults,
+		maxResults: options.maxResults,
 		part: 'snippet'
 	});
 	
-	// Send the request to the API server,
-	// and invoke onSearchRepsonse() with the response.
 	request.execute(onSearchResponse);
 }
 
@@ -59,12 +58,11 @@ function onSearchResponse(response) {
 
 function doTheThing() {
 	var url = urlInput.value;
-	var maxResults = maxResultsInput.value;
 	var playlistId = idFromUrl( url );
 
 	playerArea.innerHTML = "";
 
-	getVideos(playlistId, maxResults);
+	getVideos( playlistId );
 }
 
 function idFromUrl( url ) {
