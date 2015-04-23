@@ -74,12 +74,10 @@ function doTheThing() {
 function idFromUrl( url ) {
 	
 	var query = url.split( "?" )[1];
-	console.log(query);
 	var vars = query.split( "&" );
 	for ( var i=0; i<vars.length; i++ ) 
 	{
 		var pair = vars[ i ].split( "=" );
-		console.log( pair );
 		if(pair[0] == "list")
 		{
 			return pair[1];
@@ -110,11 +108,12 @@ function togglePauseButton() {
 
 	if ( pauseButton.dataset.state == "pauseVideo" ) 
 	{
-		pauseButton.dataset.state == "playVideo";
+		pauseButton.dataset.state = "playVideo";
 		pauseButton.innerHTML = "Play";
-	} else 
+	} 
+	else 
 	{
-		pauseButton.dataset.state == "pauseVideo";
+		pauseButton.dataset.state = "pauseVideo";
 		pauseButton.innerHTML = "Pause";
 	}
 	
