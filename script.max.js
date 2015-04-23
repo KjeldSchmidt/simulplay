@@ -96,7 +96,7 @@ function idFromUrl( url ) {
 }
 
 function generateIframe( id ) {
-	return '<iframe class="ytplayer" type="text/html" width="640" height="390"'
+	return '<iframe class="ytplayer" type="text/html"'
 		+ 'src="http://www.youtube.com/embed/' + id + '?autoplay=1&enablejsapi=1"'
 		+ 'frameborder="0" />';
 }

@@ -58,10 +58,11 @@ button, input {
 	right: 0;
 	left: 0;
 	bottom: 0;
+	overflow: hidden;
 }
 
 #playerArea .ytplayer {
 	margin: 0;
 	width: 33%;
-	height: auto;
+	height: 33%;
 }
