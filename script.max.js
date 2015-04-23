@@ -51,6 +51,11 @@ function getVideos( playlistId ) {
 // Called automatically with the response of the YouTube API request.
 function onSearchResponse(response) {
 	var videos = response.items;
+
+	if ( videos == undefined ) {
+		noVideosFound();
+	}
+
 	var videoCount = videos.length;
 
 	for (var i = 0; i < videoCount; i++) {
@@ -74,6 +79,10 @@ function doTheThing() {
 function idFromUrl( url ) {
 	
 	var query = url.split( "?" )[1];
+	if ( query == undefined ) {
+		return url;
+	}
+
 	var vars = query.split( "&" );
 	for ( var i=0; i<vars.length; i++ ) 
 	{
@@ -117,4 +126,9 @@ function togglePauseButton() {
 		pauseButton.innerHTML = "Pause";
 	}
 	
+}
+
+function noVideosFound() {
+	// TODO: User-friendly implementation
+	alert( "No videos could be found. Try with another URL" );
 }
