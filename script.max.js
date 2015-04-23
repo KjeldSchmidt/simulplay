@@ -62,11 +62,26 @@ function doTheThing() {
 	var maxResults = maxResultsInput.value;
 	var playlistId = idFromUrl( url );
 
+	playerArea.innerHTML = "";
+
 	getVideos(playlistId, maxResults);
 }
 
 function idFromUrl( url ) {
-	return "PLaWFsJLVVTDN59DBRXzGFSVy70cy30dtt";
+	
+	var query = url.split( "?" )[1];
+	console.log(query);
+	var vars = query.split( "&" );
+	for ( var i=0; i<vars.length; i++ ) 
+	{
+		var pair = vars[ i ].split( "=" );
+		console.log( pair );
+		if(pair[0] == "list")
+		{
+			return pair[1];
+		}
+	}
+	return false;
 }
 
 function generateIframe( id ) {
