@@ -1,7 +1,13 @@
 "use strict";
 
 var options = {
-	maxResults: 9
+	maxResults: 9,
+	defaultPlaylists: [
+		{
+			name: "Well known classical tunes",
+			id: "PLaWFsJLVVTDN59DBRXzGFSVy70cy30dtt"
+		},
+	]
 }
 
 var startButton = document.getElementById( 'startButton' );
