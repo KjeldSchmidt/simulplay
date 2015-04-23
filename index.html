@@ -1,15 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="fullscreen">
 <head>
 	<meta charset="UTF-8">
 	<title>Simulplay</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-	<div class="group">
-		<label>
-			<input type="text" id="urlInput" placeholder="Playlist URL" value="https://www.youtube.com/playlist?list=PLaWFsJLVVTDN59DBRXzGFSVy70cy30dtt">Playlist URL
-		</label>
+<body class="fullscreen">
+	<div id="controls" class="group">
+		<input type="text" id="urlInput" placeholder="Playlist URL">
 
 		<button id="startButton">
 			Go!
@@ -19,12 +17,12 @@
 		</button>
 	</div>
 
-	<div id="playerArea" class="group">
+	<div id="playerArea" class="group fullscreen">
 		
 	</div>
 
 
-
+	<div id="background" class="fullscreen"></div>
 	<script src="script.max.js" type="text/javascript"></script>
     <script src="https://apis.google.com/js/client.js?onload=onClientLoad" type="text/javascript"></script>
 </body>
