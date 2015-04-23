@@ -12,7 +12,7 @@ var playerArea = document.getElementById( 'playerArea' );
 
 
 startButton.onclick = doTheThing;
-pauseButton.onclick = pauseVideos;
+pauseButton.onclick = togglePauseButton;
 
 
 /*
@@ -88,8 +88,8 @@ function generateIframe( id ) {
 		+ 'frameborder="0" />';
 }
 
-function pauseVideos() {
-	var pauseArgs = '{ "event": "command", "func": "pauseVideo", "args": ""}'
+function toggleVideoPlayState( instruction ) {
+	var pauseArgs = '{ "event": "command", "func": "' + instruction + '", "args": ""}';
 
 	var iframes = document.getElementsByTagName( "iframe" );
 	var framesCount = iframes.length;
@@ -97,4 +97,19 @@ function pauseVideos() {
 		var iframe = iframes[i].contentWindow;;
 		iframe.postMessage( pauseArgs, '*' );
 	};
+}
+
+function togglePauseButton() {
+	toggleVideoPlayState( pauseButton.dataset.state );
+
+	if ( pauseButton.dataset.state == "pauseVideo" ) 
+	{
+		pauseButton.dataset.state == "playVideo";
+		pauseButton.innerHTML = "Play";
+	} else 
+	{
+		pauseButton.dataset.state == "pauseVideo";
+		pauseButton.innerHTML = "Pause";
+	}
+	
 }
