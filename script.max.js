@@ -1,7 +1,8 @@
 "use strict";
 
 var options = {
-	maxResults: 9,
+	videoCount: 9,
+	maxResults: 50,
 	defaultPlaylists: [
 		{
 			name: "Well known classical tunes",
@@ -38,27 +39,56 @@ function onYouTubeApiLoad() {
 *	These functions are custom.
 */
 
-function getVideos( playlistId ) {
+function getVideos( playlistId, pageToken ) {
 	var request = gapi.client.youtube.playlistItems.list({
 		playlistId: playlistId,
 		maxResults: options.maxResults,
-		part: 'snippet'
+		part: 'snippet',
+		pageToken: pageToken
 	});
-	
+
+	getVideos.lastUsedId = playlistId;
+
 	request.execute(onSearchResponse);
 }
 
 // Called automatically with the response of the YouTube API request.
-function onSearchResponse(response) {
-	var videos = response.items;
+function onSearchResponse( response ) {
+	var videosInResponse = response.items;
+	console.log( videosInResponse );
+	selectVideos.videos = selectVideos.videos.concat( videosInResponse );
 
-	if ( videos == undefined ) {
+	if ( videosInResponse == undefined )
+	{
 		noVideosFound();
 	}
 
-	var videoCount = videos.length;
+	if ( response.hasOwnProperty( "nextPageToken" ) ) 
+	{
+		getVideos( getVideos.lastUsedId, response.nextPageToken );
+	} 
+	else 
+	{
+		selectVideos();
+	}
+}
 
-	for (var i = 0; i < videoCount; i++) {
+function selectVideos() {
+	var possibleVideos = selectVideos.videos;
+	var selectedVideos = [];
+	console.log (possibleVideos);
+	while ( selectedVideos.length < options.videoCount ) {
+		var i = Math.floor( Math.random() * possibleVideos.length );
+		selectedVideos.push( possibleVideos[i] );
+		possibleVideos = possibleVideos.splice(i, 1);
+	}
+
+	embedVideos( selectedVideos );
+}
+
+function embedVideos( videos ) {
+	console.log(videos);
+	for ( var i = 0; i < options.videoCount; i++ ) {
 		var video = videos[i];
 		var videoId = video.snippet.resourceId.videoId;
 		var frame = generateIframe( videoId );
@@ -70,11 +100,26 @@ function onSearchResponse(response) {
 function doTheThing() {
 	var url = urlInput.value;
 	var playlistId = idFromUrl( url );
+	var videos = [];
 
 	playerArea.innerHTML = "";
+	selectVideos.videos = [];
 
 	getVideos( playlistId );
 }
+
+
+
+
+
+
+
+
+
+
+/*
+*	Helper function
+*/
 
 function idFromUrl( url ) {
 	
@@ -100,6 +145,19 @@ function generateIframe( id ) {
 		+ 'src="http://www.youtube.com/embed/' + id + '?autoplay=1&enablejsapi=1"'
 		+ 'frameborder="0" />';
 }
+
+
+
+
+
+
+
+
+
+
+/*
+*	UI Handling functions
+*/
 
 function toggleVideoPlayState( instruction ) {
 	var pauseArgs = '{ "event": "command", "func": "' + instruction + '", "args": ""}';
